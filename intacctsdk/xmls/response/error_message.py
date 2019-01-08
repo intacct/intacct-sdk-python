@@ -22,7 +22,7 @@ class ErrorMessage:
         return self._errors
 
     def __init__(self, error_messages: Element):
-        self._errors: None
+        self._errors = []
 
         error_contents = []
         for error_element in error_messages.findall("error"):
