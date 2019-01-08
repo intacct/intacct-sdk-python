@@ -42,7 +42,7 @@ setup(
     packages=["intacctsdk"],
     author="Sage Intacct, Inc.",
     url="https://developer.intacct.com",
-    requies_python="~=3.4",
+    requires_python="~=3.4",
     install_requires=[
         "requests >=2.21, <3.0"
     ],
