@@ -15,7 +15,7 @@ import codecs
 import os
 import re
 
-from setuptools import setup, find_namespace_packages
+from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -39,7 +39,7 @@ setup(
     version=find_version("intacctsdk", "version.py"),
     description="Sage Intacct SDK",
     license="Apache-2.0",
-    packages=find_namespace_packages(include=["intacctsdk", "intacctsdk.*"]),
+    packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     author="Sage Intacct, Inc.",
     url="https://developer.intacct.com",
     python_requires="~=3.5",
