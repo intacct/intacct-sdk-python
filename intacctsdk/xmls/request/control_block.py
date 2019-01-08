@@ -87,7 +87,7 @@ class ControlBlock:
         self.unique_id = request_config.unique_id
         self.policy_id = request_config.policy_id
         self.include_whitespace = False
-        self._dtd_version: str = "3.0"
+        self._dtd_version = "3.0"
 
     def write_xml(self, request: ElementTree) -> ElementTree:
         control = ElementTree.SubElement(request, "control")

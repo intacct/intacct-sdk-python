@@ -37,11 +37,11 @@ class LoginCredentials:
         return self.sender_creds.endpoint
 
     def __init__(self, config: ClientConfig, sender_creds: SenderCredentials):
-        self.company_id: str = None
-        self.entity_id: str = None
-        self.user_id: str = None
-        self.password: str = None
-        self.sender_creds: SenderCredentials = None
+        self.company_id = None
+        self.entity_id = None
+        self.user_id = None
+        self.password = None
+        self.sender_creds = None
 
         env_profile_name = os.getenv(self.COMPANY_PROFILE_ENV_NAME)
         if env_profile_name is None:

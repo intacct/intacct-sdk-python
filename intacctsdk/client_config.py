@@ -14,20 +14,17 @@
 
 class ClientConfig:
     def __init__(self):
-        from intacctsdk.credentials.login_credentials import LoginCredentials
-        from intacctsdk.credentials.session_credentials import SessionCredentials
-
-        self.profile_file: str = None
-        self.profile_name: str = None
-        self.endpoint_url: str = None
-        self.sender_id: str = None
-        self.sender_password: str = None
-        self.session_id: str = None
-        self.company_id: str = None
-        self.entity_id: str = None
-        self.user_id: str = None
-        self.user_password: str = None
-        self.credentials: LoginCredentials or SessionCredentials = None
+        self.profile_file = None
+        self.profile_name = None
+        self.endpoint_url = None
+        self.sender_id = None
+        self.sender_password = None
+        self.session_id = None
+        self.company_id = None
+        self.entity_id = None
+        self.user_id = None
+        self.user_password = None
+        self.credentials = None
         # self.logger: TODO = None
-        # self.log_level: str = None
+        # self.log_level = None
         # self.log_message_formatter: TODO = None

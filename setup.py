@@ -42,7 +42,7 @@ setup(
     packages=["intacctsdk"],
     author="Sage Intacct, Inc.",
     url="https://developer.intacct.com",
-    requires_python="~=3.4",
+    requires_python="~=3.5",
     install_requires=[
         "requests >=2.21, <3.0"
     ],
@@ -57,7 +57,6 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

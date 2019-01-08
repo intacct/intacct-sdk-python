@@ -48,11 +48,11 @@ class RequestConfig:
         self._no_retry_server_error_codes = value
 
     def __init__(self):
-        self.control_id: str = time.time().__str__()
-        self.encoding: str = "UTF-8"
-        self.max_retries: int = 5
-        self.max_timeout: int = 300
-        self.no_retry_server_error_codes: [] = [524]
-        self.policy_id: str = ""
-        self.transaction: bool = False
-        self.unique_id: bool = False
+        self.control_id = time.time().__str__()
+        self.encoding = "UTF-8"
+        self.max_retries = 5
+        self.max_timeout = 300
+        self.no_retry_server_error_codes = [524]
+        self.policy_id = ""
+        self.transaction = False
+        self.unique_id = False

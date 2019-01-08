@@ -19,9 +19,9 @@ from intacctsdk.credentials.sender_credentials import SenderCredentials
 class SessionCredentials:
 
     def __init__(self, config: ClientConfig, sender_creds: SenderCredentials):
-        self.session_id: str = None
-        self.endpoint: Endpoint = None
-        self.sender_creds: SenderCredentials = None
+        self.session_id = None
+        self.endpoint = None
+        self.sender_creds = None
 
         if config.session_id is None or config.session_id == "":
             raise Exception("Required Session ID not supplied in config")

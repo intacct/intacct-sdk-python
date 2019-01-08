@@ -21,7 +21,7 @@ class ApiSessionCreate(AbstractApiFunction):
     def __init__(self, control_id: str = None):
         super(ApiSessionCreate, self).__init__(control_id)
 
-        self.entity_id: str = None
+        self.entity_id = None
 
     def write_xml(self, xml: ElementTree) -> ElementTree:
         api_function = ElementTree.SubElement(xml, "function")

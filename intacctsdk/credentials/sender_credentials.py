@@ -29,9 +29,9 @@ class SenderCredentials:
     DEFAULT_SENDER_PROFILE = "default"
 
     def __init__(self, config: ClientConfig):
-        self.sender_id: str = None
-        self.password: str = None
-        self.endpoint: Endpoint = None
+        self.sender_id = None
+        self.password = None
+        self.endpoint = None
 
         env_profile_name = os.getenv(self.SENDER_PROFILE_ENV_NAME)
         if env_profile_name is None:

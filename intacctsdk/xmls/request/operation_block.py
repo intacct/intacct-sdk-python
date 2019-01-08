@@ -26,9 +26,9 @@ from intacctsdk.xmls.request.session_authentication import SessionAuthentication
 class OperationBlock:
 
     def __init__(self, client_config: ClientConfig, request_config: RequestConfig, content: List[ApiFunctionInterface]):
-        self.transaction: bool = None
-        self.authentication: LoginCredentials or SessionCredentials = None
-        self.content: [] = None
+        self.transaction = None
+        self.authentication = None
+        self.content = None
 
         self.transaction = request_config.transaction
 

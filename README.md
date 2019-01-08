@@ -12,7 +12,7 @@
 ## System Requirements
 
 * You must have an active Sage Intacct Web Services Developer license
-* Python ~=3.4
+* Python ~=3.5
 
 [intacct]: http://www.intacct.com
 [ia-developer]: https://developer.intacct.com/

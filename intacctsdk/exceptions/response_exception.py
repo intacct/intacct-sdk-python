@@ -18,4 +18,4 @@ class ResponseException(Exception):
 
         super().__init__(message)
 
-        self.errors: [] = errors
+        self.errors = errors
