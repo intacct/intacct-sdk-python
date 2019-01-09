@@ -14,6 +14,7 @@
 import responses
 from unittest import TestCase
 
+from intacctsdk import ResponseException
 from intacctsdk.client_config import ClientConfig
 from intacctsdk.functions.api_session import ApiSessionCreate
 from intacctsdk.request_config import RequestConfig
@@ -199,8 +200,43 @@ class TestRequestHandler(TestCase):
         with self.assertRaises(Exception) as cm:
             response = request_handler.execute_online([ApiSessionCreate()])
 
-        self.assertEqual("503 Server Error: Service Unavailable for url: https://api.intacct.com/ia/xml/xmlgw.phtml",
+        self.assertEqual("Request retry count exceeded max retry count: 2",
                          str(cm.exception))
+
+    @responses.activate
+    def test400LevelErrorWithXmlResponse(self):
+        xml_response = """<?xml version="1.0" encoding="utf-8" ?>
+<response>
+    <control>
+        <status>failure</status>
+    </control>
+    <errormessage>
+        <error>
+            <errorno>XMLGW_JPP0002</errorno>
+            <description>Sign-in information is incorrect. Please check your request.</description>
+        </error>
+    </errormessage>
+</response>"""
+        headers = {
+            "Content-Type": 'text/xml; encoding="UTF-8"',
+        }
+
+        responses.add(responses.POST, 'https://api.intacct.com/ia/xml/xmlgw.phtml', body=xml_response, status=401,
+                      headers=headers)
+
+        config = ClientConfig()
+        config.sender_id = "testsender"
+        config.sender_password = "testsendpass"
+        config.session_id = "testsession.."
+
+        request_config = RequestConfig()
+
+        request_handler = RequestHandler(config, request_config)
+
+        with self.assertRaises(ResponseException) as cm:
+            response = request_handler.execute_online([ApiSessionCreate()])
+
+        self.assertEqual("Response control status failure", str(cm.exception))
 
     @responses.activate
     def testErrorAfter524ServerError(self):

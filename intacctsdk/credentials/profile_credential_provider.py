@@ -77,6 +77,8 @@ class ProfileCredentialProvider:
         if config.profile_file is None:
             config.profile_file = ProfileCredentialProvider.get_home_dir_profile()
 
+        # https://docs.python.org/3/library/configparser.html#supported-ini-file-structure
+        # `key="value"` will be loaded with the quotation marks therefore you must use `key=value` instead
         data = configparser.ConfigParser()
         data.read(config.profile_file)
 

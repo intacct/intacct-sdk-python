@@ -10,13 +10,11 @@
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
 #  express or implied. See the License for the specific language governing
 #  permissions and limitations under the License.
-
+import cgi
 import time
 import math
 import requests
 from typing import List
-
-from requests import HTTPError
 
 from intacctsdk.version import __version__
 from intacctsdk.client_config import ClientConfig
@@ -72,27 +70,32 @@ class RequestHandler:
             'User-Agent': 'intacct-sdk-python-client/' + self._version,
         }
 
-        attempt = 0
-        while attempt <= self.request_config.max_retries:
+        for attempt in range(0, self.request_config.max_retries + 1):
             if attempt > 0:
                 # Delay this retry based on exponential delay
                 self.exponential_delay(attempt)
-            try:
-                response = requests.post(self.endpoint_url, data=xml, headers=headers,
-                                         timeout=self.request_config.max_timeout)
-                response.raise_for_status()
-                return response
 
-            except HTTPError as error:
-                if 500 <= error.response.status_code <= 599:
-                    if error.response.status_code in self.request_config.no_retry_server_error_codes:
-                        raise error
-                    elif attempt < self.request_config.max_retries:
-                        attempt += 1
-                    else:
-                        raise error
-                else:
-                    raise error
+            response = requests.post(self.endpoint_url, data=xml, headers=headers,
+                                     timeout=self.request_config.max_timeout)
+
+            if response.ok is True:
+                return response
+            elif response.status_code in self.request_config.no_retry_server_error_codes:
+                # Do not retry this explicitly set 500 level server error
+                response.raise_for_status()
+            elif 500 <= response.status_code <= 599:
+                # Retry 500 level server errors
+                continue
+            else:
+                content_type = response.headers['Content-Type']
+                if content_type is not None:
+                    mime_type, options = cgi.parse_header(content_type)
+
+                    if mime_type == "text/xml" or mime_type == "application/xml":
+                        return response
+
+                response.raise_for_status()
+
         raise Exception("Request retry count exceeded max retry count: " + str(self.request_config.max_retries))
 
     @staticmethod
