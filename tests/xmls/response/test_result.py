@@ -209,6 +209,7 @@ class TestResult(TestCase):
         self.assertEqual(1, result.end)
         self.assertEqual(2, result.total_count)
         self.assertEqual(2, len(result.data))
+        self.assertEqual('C1234', result.data[0].findtext('key'))
 
     def testParseReadByQueryClassResponse(self):
         xml = """<?xml version="1.0" encoding="utf-8" ?>
@@ -243,6 +244,7 @@ class TestResult(TestCase):
         self.assertEqual(1, result.num_remaining)
         self.assertEqual("myResultId", result.result_id)
         self.assertEqual(1, len(result.data))
+        self.assertEqual('8', result.data[0].findtext('RECORDNO'))
 
     def testParseReadByQueryWithMultipleRecords(self):
         xml = """<?xml version="1.0" encoding="utf-8" ?>
@@ -294,6 +296,8 @@ class TestResult(TestCase):
         self.assertEqual(1, result.num_remaining)
         self.assertEqual("myResultId", result.result_id)
         self.assertEqual(2, len(result.data))
+        self.assertEqual('8', result.data[0].findtext('RECORDNO'))
+        self.assertEqual('9', result.data[1].findtext('RECORDNO'))
 
     def testParseLegacyCreateClassKey(self):
         xml = """<?xml version="1.0" encoding="utf-8" ?>
