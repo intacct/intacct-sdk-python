@@ -35,7 +35,7 @@ def find_version(*file_paths):
 
 
 setup(
-    name="Sage Intacct SDK",
+    name="intacctsdk",
     version=find_version("intacctsdk", "version.py"),
     description="Sage Intacct SDK",
     license="Apache-2.0",
