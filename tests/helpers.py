@@ -11,12 +11,19 @@
 #  express or implied. See the License for the specific language governing
 #  permissions and limitations under the License.
 
-from .version import __version__
+from unittest import TestCase
+from xml.etree import ElementTree
+from xml.dom import minidom
 
-from .configs import ClientConfig, RequestConfig
-from .clients import OnlineClient, OfflineClient, SessionProvider
-from .exceptions import IntacctException, ResponseException, ResultException
-from .xml_requests import RequestBlock
-from .xml_responses import OnlineResponse, OfflineResponse
 
-from . import functions
+class XmlObjectTestHelper:
+
+    @staticmethod
+    def compare_xml(test_case: TestCase, expected: str, api_function: ElementTree):
+        test = ElementTree.Element("test")
+
+        api_function.write_xml(test)
+
+        actual = minidom.parseString(ElementTree.tostring(test)).toprettyxml(indent="    ")
+
+        test_case.assertEqual(expected, actual)

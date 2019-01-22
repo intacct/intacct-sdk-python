@@ -11,12 +11,22 @@
 #  express or implied. See the License for the specific language governing
 #  permissions and limitations under the License.
 
-from .version import __version__
 
-from .configs import ClientConfig, RequestConfig
-from .clients import OnlineClient, OfflineClient, SessionProvider
-from .exceptions import IntacctException, ResponseException, ResultException
-from .xml_requests import RequestBlock
-from .xml_responses import OnlineResponse, OfflineResponse
+class IntacctException(Exception):
+    pass
 
-from . import functions
+
+class ResponseException(Exception):
+
+    def __init__(self, message: str, errors: []):
+
+        super().__init__(message)
+
+        self.errors = errors
+
+
+class ResultException(ResponseException):
+
+    def __init__(self, message: str, errors: []):
+
+        super().__init__(message, errors)
