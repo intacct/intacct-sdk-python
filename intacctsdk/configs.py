@@ -11,7 +11,10 @@
 #  express or implied. See the License for the specific language governing
 #  permissions and limitations under the License.
 
+from logging import DEBUG
 import time
+
+from logs import MessageFormatter
 
 
 class ClientConfig:
@@ -27,9 +30,8 @@ class ClientConfig:
         self.user_id = None
         self.user_password = None
         self.credentials = None
-        # self.logger: TODO = None
-        # self.log_level = None
-        # self.log_message_formatter: TODO = None
+        self.log_level = DEBUG
+        self.log_message_formatter = MessageFormatter()
 
 
 class RequestConfig:

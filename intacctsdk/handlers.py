@@ -12,9 +12,10 @@
 #  permissions and limitations under the License.
 
 import cgi
-import time
+import logging
 import math
 import requests
+import time
 
 from typing import List
 
@@ -24,6 +25,8 @@ from .functions import ApiFunctionInterface
 from .version import __version__
 from .xml_requests import RequestBlock
 from .xml_responses import OnlineResponse, OfflineResponse
+
+log = logging.getLogger(__name__)
 
 
 class RequestHandler:
@@ -56,7 +59,9 @@ class RequestHandler:
         if self.request_config.policy_id is None or self.request_config.policy_id == "":
             raise Exception("Required Policy ID not supplied in config for offline request")
 
-        # TODO logger warning section for session creds in offline request
+        if log.isEnabledFor(logging.WARNING):
+            log.warning('Offline execution sent to Intacct using Session-based credentials.' +
+                        'Use Login-based credentials instead to avoid session timeouts.')
 
         request = RequestBlock(self.client_config, self.request_config, content)
         response = self.execute(request.write_xml())
@@ -77,6 +82,8 @@ class RequestHandler:
 
             response = requests.post(self.endpoint_url, data=xml, headers=headers,
                                      timeout=self.request_config.max_timeout)
+            if log.isEnabledFor(self.client_config.log_level) and self.client_config.log_message_formatter is not None:
+                log.log(self.client_config.log_level, self.client_config.log_message_formatter.format(response))
 
             if response.ok is True:
                 return response

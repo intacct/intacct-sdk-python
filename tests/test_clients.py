@@ -11,6 +11,7 @@
 #  express or implied. See the License for the specific language governing
 #  permissions and limitations under the License.
 
+import logging
 import responses
 from unittest import TestCase
 from unittest.mock import patch
@@ -204,7 +205,59 @@ class TestOnlineClient(TestCase):
 
         self.assertEqual("Result status: failure for Control ID: func2UnitTest", str(cm.exception))
 
-    # TODO logging test
+    @responses.activate
+    def testLogRequestAndResponse(self):
+        xml_response = """<?xml version="1.0" encoding="UTF-8"?>
+<response>
+      <control>
+            <status>success</status>
+            <senderid>testsenderid</senderid>
+            <controlid>requestUnitTest</controlid>
+            <uniqueid>false</uniqueid>
+            <dtdversion>3.0</dtdversion>
+      </control>
+      <operation>
+            <authentication>
+                  <status>success</status>
+                  <userid>testuser</userid>
+                  <companyid>testcompany</companyid>
+                  <locationid></locationid>
+                  <sessiontimestamp>2015-12-06T15:57:08-08:00</sessiontimestamp>
+            </authentication>
+            <result>
+                <status>success</status>
+                <function>readByQuery</function>
+                <controlid>func1UnitTest</controlid>
+                <data listtype="customer" count="1" totalcount="1" numremaining="0" resultId="">
+                    <customer>
+                        <CUSTOMERID>C0001</CUSTOMERID>
+                        <NAME>Intacct Corporation</NAME>
+                    </customer>
+                </data>
+            </result>
+      </operation>
+</response>"""
+        headers = {
+            "Content-Type": 'text/xml; encoding="UTF-8"',
+        }
+
+        responses.add(responses.POST, 'https://api.intacct.com/ia/xml/xmlgw.phtml', body=xml_response, status=200,
+                      headers=headers)
+
+        config = ClientConfig()
+        config.sender_id = "testsender"
+        config.sender_password = "testsendpass"
+        config.session_id = "testsession.."
+
+        request_config = RequestConfig()
+        request_config.transaction = True
+
+        client = OnlineClient(config)
+
+        with self.assertLogs(logging.getLogger(), logging.DEBUG) as cm:
+            client.execute(ApiSessionCreate('func1UnitTest'), request_config)
+
+        self.assertTrue("<password>REDACTED</password>" in cm.records[0].getMessage())
 
 
 class TestOfflineClient(TestCase):

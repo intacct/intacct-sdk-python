@@ -11,9 +11,11 @@
 #  express or implied. See the License for the specific language governing
 #  permissions and limitations under the License.
 
+from logging import DEBUG
 from unittest import TestCase
 
 from intacctsdk.configs import ClientConfig, RequestConfig
+from logs import MessageFormatter
 
 
 class TestClientConfig(TestCase):
@@ -32,9 +34,8 @@ class TestClientConfig(TestCase):
         self.assertIsNone(config.user_id)
         self.assertIsNone(config.user_password)
         self.assertIsNone(config.credentials)
-        # TODO self.assertIsNone(config.logger)
-        # TODO self.assertIsNone(config.logLevel)
-        # TODO self.assertIsNone(config.logMessageFormatter)
+        self.assertEqual(config.log_level, DEBUG)
+        self.assertIsInstance(config.log_message_formatter, MessageFormatter)
 
 
 class TestRequestConfig(TestCase):
