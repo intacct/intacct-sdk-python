@@ -41,6 +41,18 @@ class MessageFormatter:
 
         return result
 
+    @staticmethod
+    def parse_http_version(version):
+        # HTTP protocol version used by server. 10 for HTTP/1.0, 11 for HTTP/1.1.
+        # https://docs.python.org/2/library/httplib.html?highlight=version#httplib.HTTPResponse.version
+
+        if version == "10":
+            return "1.0"
+        elif version == "11":
+            return "1.1"
+        else:
+            return version
+
     def __init__(self, format_template: str = None):
         self._template = None
         if format_template is None:
@@ -49,6 +61,10 @@ class MessageFormatter:
 
     def format(self, response: Response, error=None):
         url_scheme, url_auth, url_host, url_port, url_path, url_query, url_fragment = parse_url(response.url)
+
+        # http://docs.python-requests.org/en/master/
+        # "Requests allows you to send organic, grass-fed HTTP/1.1 requests"
+        http_requests_version = "1.1"
 
         request_val_headers = ""
         for request_header_key, request_header_val in response.request.headers.items():
@@ -59,7 +75,7 @@ class MessageFormatter:
             " ",
             url_path,
             url_query,
-            " HTTP/?",
+            " HTTP/" + http_requests_version,
             "\nHost: ",
             url_host,
             request_val_headers,
@@ -72,7 +88,9 @@ class MessageFormatter:
             response_val_headers += "\n{" + response_header_key + "}: " + response_header_val
 
         response_val = "".join(filter(None, [
-            "HTTP/? ",
+            "HTTP/",
+            self.parse_http_version(str(response.raw.version or "")),
+            " ",
             str(response.status_code),
             " ",
             response.reason,
@@ -86,12 +104,14 @@ class MessageFormatter:
             " ",
             url_path,
             url_query,
-            " HTTP/?\n",
+            " HTTP/" + http_requests_version + "\n",
             self.headers(response.request.headers),
         ]))
 
         res_headers = "".join(filter(None, [
-            "HTTP/? ",
+            "HTTP/",
+            str(response.raw.version or ""),
+            " ",
             str(response.status_code),
             " ",
             response.reason,
@@ -124,8 +144,8 @@ class MessageFormatter:
             'uri': response.url,
             'url': response.url,
             'target': response.url,
-            'req_version': '?',
-            'res_version': '?',
+            'req_version': http_requests_version,
+            'res_version': self.parse_http_version(str(response.raw.version or "")),
             'host': url_host,
             'hostname': socket.gethostname(),
             'code': str(response.status_code),
