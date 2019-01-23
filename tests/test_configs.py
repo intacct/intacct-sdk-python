@@ -15,7 +15,7 @@ from logging import DEBUG
 from unittest import TestCase
 
 from intacctsdk.configs import ClientConfig, RequestConfig
-from logs import MessageFormatter
+from intacctsdk.logs import MessageFormatter
 
 
 class TestClientConfig(TestCase):

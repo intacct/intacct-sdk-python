@@ -14,7 +14,7 @@
 from logging import DEBUG
 import time
 
-from logs import MessageFormatter
+from .logs import MessageFormatter
 
 
 class ClientConfig:
