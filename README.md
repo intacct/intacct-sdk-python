@@ -1,5 +1,7 @@
 # Sage Intacct SDK for Python
 
+[![Travis Build Status](https://travis-ci.com/Intacct/intacct-sdk-python.svg)](https://travis-ci.com/Intacct/intacct-sdk-python)
+
 ## Resources
 
 * [SDK Guides][sdk-homepage] - Getting started with the SDK
