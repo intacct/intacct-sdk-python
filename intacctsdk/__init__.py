@@ -24,6 +24,7 @@ del NullHandler
 from .configs import ClientConfig, RequestConfig
 from .clients import OnlineClient, OfflineClient, SessionProvider
 from .exceptions import IntacctException, ResponseException, ResultException
+from .logs import MessageFormatter
 from .xml_requests import RequestBlock
 from .xml_responses import OnlineResponse, OfflineResponse
 
